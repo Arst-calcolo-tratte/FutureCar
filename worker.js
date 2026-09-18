@@ -32,7 +32,7 @@ export default {
           filters: { allowed_domains: MARKET_DOMAINS },
           user_location: { type: "approximate", country: "IT", region: "Sardegna", city: "Cagliari" }
         }],
-        tool_choice: "required",
+        tool_choice: "auto",
         input: [{
           role: "system",
           content: [{
@@ -81,10 +81,10 @@ export default {
       const data = await safeJson(response);
       try {
         const text = extractOutputText(data);
-        const result = JSON.parse(text);
+        const result = parseJsonObject(text);
         return json({ ok:true, listings:result.listings, sources:result.sources?.length||0, note:result.note });
-      } catch {
-        return json({ error:"Risposta di ricerca non valida dal servizio AI." },502);
+      } catch (e) {
+        return json({ error:"Risposta di ricerca non valida dal servizio AI.", detail:e.message },502);
       }
     }
 
@@ -133,7 +133,7 @@ export default {
       });
       if (!response.ok) return openaiError(response);
       const data = await safeJson(response);
-      try { return json({ok:true,analysis:JSON.parse(extractOutputText(data))}); }
+      try { return json({ok:true,analysis:parseJsonObject(extractOutputText(data))}); }
       catch { return json({error:"L'AI ha restituito un formato non valido.",debug:data?.output?.map(x=>x?.type||"unknown")||[]},502); }
     }
 
@@ -176,6 +176,15 @@ function extractOutputText(data) {
     }
   }
   return parts.join("\n").trim();
+}
+function parseJsonObject(text) {
+  if (!text) throw new Error("Risposta AI vuota.");
+  const clean = text.replace(/^\s*```(?:json)?\s*/i,"").replace(/\s*```\s*$/,"").trim();
+  try { return JSON.parse(clean); } catch {}
+  const start = clean.indexOf("{");
+  const end = clean.lastIndexOf("}");
+  if (start >= 0 && end > start) return JSON.parse(clean.slice(start,end+1));
+  throw new Error("JSON AI non trovato.");
 }
 async function openaiError(response) {
   const data=await safeJson(response);
