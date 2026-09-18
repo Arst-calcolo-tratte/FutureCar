@@ -22,6 +22,7 @@ export default {
       if (!env.OPENAI_API_KEY) return json({ error: "OPENAI_API_KEY non configurata sul Worker futurecar." }, 500);
       let body;
       try { body = await request.json(); } catch { return json({ error: "JSON non valido." }, 400); }
+      const filters = body?.filters || {};
 
       const response = await openai(env, {
         model: env.OPENAI_MODEL || MODEL,
