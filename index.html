@@ -31,12 +31,12 @@
   <div class="hero-card">
     <div class="live-dot">RICERCA INTELLIGENTE</div>
     <strong>“Massimo 18.000 €, dal 2020, benzina o ibrida, no 3 cilindri, affidabile”</strong>
-    <div class="hero-stat"><b>247</b><span>annunci trovati</span><b>32</b><span>compatibili</span></div>
+    <div class="hero-stat"><b>LIVE</b><span>annunci da fonti web</span><b>AI</b><span>analisi verificata</span></div>
   </div>
 </section>
 
 <section id="search" class="section">
-  <div class="section-head"><div><div class="eyebrow">SEARCH ENGINE</div><h2>Cerca secondo le tue regole</h2></div><span class="pill">AI ready</span></div>
+  <div class="section-head"><div><div class="eyebrow">SEARCH ENGINE</div><h2>Cerca secondo le tue regole</h2></div><span class="pill">LIVE WEB SEARCH</span></div>
   <div class="panel">
     <div class="grid">
       <label>Modello / parole chiave<input id="q" placeholder="Toyota Yaris Hybrid"></label>
@@ -46,7 +46,7 @@
       <label>Alimentazione<select id="fuel"><option value="">Tutte</option><option>Benzina</option><option>Ibrida</option><option>Diesel</option><option>GPL</option><option>Elettrica</option></select></label>
       <label>Cambio<select id="gear"><option value="">Tutti</option><option>Manuale</option><option>Automatico</option></select></label>
       <label>Cilindri<select id="cyl"><option value="">Tutti</option><option value="3">Evita 3 cilindri</option><option value="4">4 cilindri</option><option value="6">6 cilindri</option></select></label>
-      <label>Km annui<input id="annual" type="number" placeholder="20000"></label>
+      <label>Km annui<input id="annual" type="number" placeholder="20000"></label><label>Zona<input id="location" placeholder="Sardegna, Cagliari, Italia"></label>
     </div>
     <label class="priority">Cosa conta davvero per te?<textarea id="priority" placeholder="Affidabilità, consumi reali, manutenzione, no cinghia a bagno d'olio..."></textarea></label>
     <div class="search-row"><button id="searchBtn" class="btn" type="button">Cerca e analizza <span>→</span></button><span id="status" aria-live="polite"></span></div>
@@ -72,7 +72,7 @@
 <section class="section">
   <div class="eyebrow">DATA LAYER</div><h2>Multi-source by design</h2>
   <div class="sources">
-    <article><b>Marketplace</b><p>Fonti di annunci tramite accessi consentiti, API, feed o licenze.</p></article>
+    <article><b>Marketplace</b><p>Annunci recuperati tramite ricerca web e fonti pubbliche accessibili; nessun risultato inventato.</p></article>
     <article><b>Dati veicolo</b><p>Specifiche, consumi, listini e versioni.</p></article>
     <article><b>Ricerca</b><p>Richiami, difetti, manutenzione e consumi reali.</p></article>
     <article><b>AI</b><p>Analisi con fonti, calcoli e livello di confidenza.</p></article>
@@ -81,13 +81,96 @@
 </main>
 <footer>FutureCar · Automotive Intelligence · <span>© 2026</span></footer>
 <script>
-const listings=[{title:'Toyota Yaris 1.5 Hybrid',meta:'2022 · 42.000 km · Automatico · Ibrida',price:16900,tags:['1.5 Hybrid','Euro 6d']},{title:'Honda Jazz 1.5 e:HEV',meta:'2021 · 51.000 km · Automatico · Ibrida',price:15800,tags:['1.5 Hybrid','Euro 6d']},{title:'Mazda 3 2.0 Skyactiv-G',meta:'2021 · 58.000 km · Manuale · Benzina',price:17200,tags:['2.0 4 cilindri','122 CV']}];
-const $=id=>document.getElementById(id);const API_BASE='https://futurecar.mariolik.workers.dev';async function analyzeListing(listing){const r=await fetch(API_BASE+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({listing,userPriorities:$('priority').value})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Errore API');return d.analysis;}async function showAnalysis(listing){$('status').textContent='Analisi AI in corso…';try{const a=await analyzeListing(listing);$('status').textContent='Analisi completata.';let box=document.getElementById('aiResult');if(!box){box=document.createElement('div');box.id='aiResult';box.className='panel';document.getElementById('analysis').appendChild(box)}box.innerHTML='<h3>'+a.summary+'</h3><p><b>Identificazione:</b> '+a.identity+'</p><p><b>Rischi:</b> '+a.risks.join(' · ')+'</p><p><b>Controlli:</b> '+a.nextChecks.join(' · ')+'</p><p><b>Confidenza:</b> '+a.confidence+'</p>';location.hash='analysis';}catch(e){$('status').textContent=e.message;}}
-function render(xs){$('cards').innerHTML=xs.map((x,i)=>`<article class="card"><span class="meta">Risultato dimostrativo · adapter pronto</span><h3>${x.title}</h3><div class="meta">${x.meta}</div><div class="price">€ ${x.price.toLocaleString('it-IT')}</div><div>${x.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><button class="btn" style="margin-top:14px" type="button" data-i="${i}">Analizza con AI →</button></article>`).join('');document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>showAnalysis(xs[Number(b.dataset.i)]));}
-$('searchBtn').onclick=()=>{$('results').hidden=false;$('count').textContent='3 risultati dimostrativi · integrazione fonti reali tramite API/feed/licenze consentite.';$('status').textContent='Ricerca configurata. Frontend pronto per il primo adapter reale.';render(listings);$('results').scrollIntoView({behavior:'smooth',block:'start'});};
-render(listings);
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-$('homeBtn').onclick=()=>{const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;if(standalone){$('status').textContent='FutureCar è già installata nella schermata Home.';location.hash='search';return;}$('status').textContent='Su iPhone: apri in Safari → Condividi → Aggiungi alla schermata Home.';location.hash='search';};
-</script>
+const $=id=>document.getElementById(id);
+const API_BASE=location.origin;
+let currentResults=[];
+
+function esc(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function eur(v){
+  const n=Number(v);
+  return Number.isFinite(n)?n.toLocaleString("it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:0}):"Prezzo non indicato";
+}
+function buildFilters(){
+  return {
+    q:$("q").value.trim(),
+    maxPrice:$("price").value?Number($("price").value):null,
+    minYear:$("year").value?Number($("year").value):null,
+    maxKm:$("km").value?Number($("km").value):null,
+    fuel:$("fuel").value||null,
+    gearbox:$("gear").value||null,
+    cylinders:$("cyl").value||null,
+    annualKm:$("annual").value?Number($("annual").value):null,
+    location:$("location").value.trim()||null,
+    priorities:$("priority").value.trim()||null
+  };
+}
+async function api(path,body){
+  const r=await fetch(API_BASE+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  let d=null;try{d=await r.json()}catch{}
+  if(!r.ok)throw new Error(d?.error||"Errore del server");
+  return d;
+}
+function renderResults(items){
+  currentResults=items||[];
+  $("cards").innerHTML=currentResults.length?currentResults.map((x,i)=>`
+    <article class="card">
+      <span class="meta">${esc(x.source||"Fonte web")} · annuncio reale</span>
+      <h3>${esc(x.title)}</h3>
+      <div class="meta">${esc(x.meta||"Dati parziali")}</div>
+      <div class="price">${eur(x.price)}</div>
+      <div>${(x.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+      <p class="meta" style="margin-top:14px">${esc(x.location||"Località non indicata")}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">Apri annuncio →</a>
+        <button class="btn" type="button" data-ai="${i}">Analizza con AI</button>
+      </div>
+    </article>`).join(""):`
+    <div class="panel"><h3>Nessun annuncio reale trovato</h3><p class="meta">Prova ad allargare prezzo, anno, chilometraggio o zona. FutureCar non inserisce risultati inventati.</p></div>`;
+  document.querySelectorAll("[data-ai]").forEach(b=>b.onclick=()=>showAnalysis(currentResults[Number(b.dataset.ai)]));
+}
+async function search(){
+  const filters=buildFilters();
+  $("status").textContent="Ricerca web in corso…";
+  $("searchBtn").disabled=true;
+  try{
+    const d=await api("/api/search",{filters});
+    renderResults(d.listings||[]);
+    $("count").textContent=`${(d.listings||[]).length} annunci reali trovati · ${d.sources||0} fonti`;
+    $("status").textContent=d.note||"Ricerca completata.";
+    $("results").hidden=false;
+    $("results").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){$("status").textContent=e.message}
+  finally{$("searchBtn").disabled=false}
+}
+async function showAnalysis(listing){
+  $("status").textContent="Analisi AI con verifica web in corso…";
+  try{
+    const d=await api("/api/analyze",{listing,userPriorities:$("priority").value.trim()});
+    const a=d.analysis;
+    let box=document.getElementById("aiResult");
+    if(!box){box=document.createElement("div");box.id="aiResult";box.className="panel";document.getElementById("analysis").appendChild(box)}
+    box.innerHTML=`
+      <h3>${esc(a.summary)}</h3>
+      <p><b>Identificazione:</b> ${esc(a.identity)}</p>
+      <p><b>Punti forti:</b> ${(a.strengths||[]).map(esc).join(" · ")}</p>
+      <p><b>Rischi:</b> ${(a.risks||[]).map(esc).join(" · ")}</p>
+      <p><b>Fatti verificati:</b> ${(a.facts||[]).map(esc).join(" · ")}</p>
+      <p><b>Stime:</b> ${(a.estimates||[]).map(esc).join(" · ")}</p>
+      <p><b>Domande al venditore:</b> ${(a.sellerQuestions||[]).map(esc).join(" · ")}</p>
+      <p><b>Controlli successivi:</b> ${(a.nextChecks||[]).map(esc).join(" · ")}</p>
+      <p><b>Confidenza:</b> ${esc(a.confidence)}</p>
+      <p class="meta">Fonti consultate: ${(a.sources||[]).map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.title||x.url)}</a>`).join(" · ")}</p>`;
+    $("status").textContent="Analisi completata.";
+    location.hash="analysis";
+  }catch(e){$("status").textContent=e.message}
+}
+$("searchBtn").onclick=search;
+["q","price","year","km","fuel","gear","cyl","location","priority"].forEach(id=>{
+  $(id).addEventListener("keydown",e=>{if(e.key==="Enter"&&id!=="priority"){e.preventDefault();search()}});
+});
+$("homeBtn").onclick=()=>{if(window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone){location.hash="search"}else{$("status").textContent="Su iPhone: Safari → Condividi → Aggiungi alla schermata Home.";location.hash="search"}};
+</script>>
 </body>
 </html>
