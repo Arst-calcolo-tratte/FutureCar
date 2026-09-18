@@ -137,8 +137,16 @@ export default {
     }
 
     if (request.method === "GET" || request.method === "HEAD") {
-      if (env.ASSETS) return env.ASSETS.fetch(request);
-      return new Response("FutureCar: asset binding non configurato.",{status:500});
+      const path = u.pathname === "/" ? "/index.html" : u.pathname;
+      const cleanPath = path.replace(/^\/+/, "");
+      const asset = await fetch("https://raw.githubusercontent.com/Arst-calcolo-tratte/FutureCar/main/" + cleanPath, {
+        headers: { "Accept": "text/plain" }
+      });
+      if (!asset.ok) return new Response("FutureCar: file non trovato.", { status: 404 });
+      const headers = new Headers(asset.headers);
+      headers.set("Cache-Control", "no-store");
+      headers.set("Content-Type", mime(cleanPath));
+      return new Response(asset.body, { status: asset.status, headers });
     }
 
     return json({error:"Endpoint non trovato."},404);
@@ -168,6 +176,19 @@ function cors(){
     "Access-Control-Allow-Methods":"GET,POST,OPTIONS",
     "Access-Control-Allow-Headers":"Content-Type"
   };
+}
+function mime(path) {
+  const ext = path.split(".").pop().toLowerCase();
+  return ({
+    html:"text/html; charset=utf-8",
+    css:"text/css; charset=utf-8",
+    js:"application/javascript; charset=utf-8",
+    webmanifest:"application/manifest+json; charset=utf-8",
+    json:"application/json; charset=utf-8",
+    svg:"image/svg+xml",
+    png:"image/png",
+    ico:"image/x-icon"
+  })[ext] || "application/octet-stream";
 }
 function json(data,status=200){
   return new Response(JSON.stringify(data),{
