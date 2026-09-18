@@ -80,7 +80,8 @@ export default {
       if (!response.ok) return openaiError(response);
       const data = await safeJson(response);
       try {
-        const result = JSON.parse(data.output_text);
+        const text = extractOutputText(data);
+        const result = JSON.parse(text);
         return json({ ok:true, listings:result.listings, sources:result.sources?.length||0, note:result.note });
       } catch {
         return json({ error:"Risposta di ricerca non valida dal servizio AI." },502);
@@ -132,8 +133,8 @@ export default {
       });
       if (!response.ok) return openaiError(response);
       const data = await safeJson(response);
-      try { return json({ok:true,analysis:JSON.parse(data.output_text)}); }
-      catch { return json({error:"L'AI ha restituito un formato non valido."},502); }
+      try { return json({ok:true,analysis:JSON.parse(extractOutputText(data))}); }
+      catch { return json({error:"L'AI ha restituito un formato non valido.",debug:data?.output?.map(x=>x?.type||"unknown")||[]},502); }
     }
 
     if (request.method === "GET" || request.method === "HEAD") {
@@ -165,6 +166,16 @@ async function openai(env, payload) {
 }
 async function safeJson(response) {
   try { return await response.json(); } catch { return {}; }
+}
+function extractOutputText(data) {
+  if (typeof data?.output_text === "string" && data.output_text.trim()) return data.output_text;
+  const parts = [];
+  for (const item of (data?.output || [])) {
+    for (const c of (item?.content || [])) {
+      if (typeof c?.text === "string" && c.text.trim()) parts.push(c.text);
+    }
+  }
+  return parts.join("\n").trim();
 }
 async function openaiError(response) {
   const data=await safeJson(response);
