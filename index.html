@@ -1,1 +1,86 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FutureCar — Auto, dati e AI</title><link rel="stylesheet" href="styles.css"></head><body><header><div class="brand"><b>FC</b> FutureCar</div><nav><a href="#search">Cerca</a><a href="#analysis">AI Analyst</a></nav></header><main><section class="hero"><div><small>AUTOMOTIVE INTELLIGENCE</small><h1>Trova l'auto.<br><em>Capisci davvero</em> cosa stai comprando.</h1><p>Annunci reali, dati tecnici, costi di mantenimento e ricerca online, uniti in un'unica analisi.</p><a class="btn" href="#search">Inizia la ricerca</a></div><div class="hero-card"><small>RICERCA INTELLIGENTE</small><strong>“Massimo 18.000 €, dal 2020, benzina o ibrida, no 3 cilindri, affidabile”</strong><span>247 annunci trovati · 32 compatibili</span></div></section><section id="search"><small>SEARCH ENGINE</small><h2>Cerca secondo le tue regole</h2><div class="panel"><div class="grid"><label>Modello/parole chiave<input id="q" placeholder="Toyota Yaris Hybrid"></label><label>Prezzo max<input id="price" type="number" placeholder="18000"></label><label>Anno min<input id="year" type="number" placeholder="2020"></label><label>Km max<input id="km" type="number" placeholder="80000"></label><label>Alimentazione<select id="fuel"><option value="">Tutte</option><option>Benzina</option><option>Ibrida</option><option>Diesel</option><option>GPL</option><option>Elettrica</option></select></label><label>Cambio<select id="gear"><option value="">Tutti</option><option>Manuale</option><option>Automatico</option></select></label><label>Cilindri<select id="cyl"><option value="">Tutti</option><option value="3">Evita 3 cilindri</option><option value="4">4 cilindri</option><option value="6">6 cilindri</option></select></label><label>Km annui<input id="annual" type="number" placeholder="20000"></label></div><label>Priorità<textarea id="priority" placeholder="Affidabilità, consumi reali, manutenzione, no cinghia a bagno d'olio..."></textarea></label><button id="searchBtn" class="btn" type="button">Cerca e analizza</button><p id="status" aria-live="polite"></p></div></section><section id="results" hidden><small>MARKETPLACE</small><h2>Risultati</h2><p id="count"></p><div id="cards" class="cards"></div></section><section id="analysis" class="dark"><small>AI ANALYST</small><h2>Non leggere solo l'annuncio. Analizza l'auto.</h2><div class="features"><article><b>Identificazione</b><p>Modello, generazione, motore, cambio e allestimento.</p></article><article><b>Tecnica</b><p>Distribuzione, turbo, DPF, EGR, batteria, richiami.</p></article><article><b>Costi reali</b><p>Carburante, manutenzione, pneumatici, bollo e possesso.</p></article><article><b>Ricerca online</b><p>Fonti e problemi ricorrenti separati tra fatti, stime e testimonianze.</p></article></div></section><section><small>DATA LAYER</small><h2>Multi-source by design</h2><div class="sources"><article><b>Marketplace</b><p>AutoScout24, Subito Motori, Automobile.it e altre fonti, tramite accessi consentiti.</p></article><article><b>Dati veicolo</b><p>Specifiche, consumi, listini e versioni.</p></article><article><b>Ricerca</b><p>Richiami, difetti, manutenzione e consumi reali.</p></article><article><b>AI</b><p>Analisi con fonti e livello di confidenza.</p></article></div></section></main><footer>FutureCar · Automotive Intelligence</footer><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FutureCar">
+<meta name="description" content="FutureCar — ricerca auto, dati tecnici, costi e analisi AI.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="styles.css">
+<title>FutureCar — Auto, dati e AI</title>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-mark">FC</span><span>Future<span>Car</span></span></a>
+  <nav><a href="#search">Cerca</a><a href="#analysis">AI Analyst</a></nav>
+  <button class="home-btn" id="homeBtn" type="button">＋ Home</button>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">AUTOMOTIVE INTELLIGENCE</div>
+    <h1>Trova l'auto.<br><em>Capisci davvero</em> cosa stai comprando.</h1>
+    <p>Annunci reali, dati tecnici, costi di mantenimento e ricerca online, uniti in un'unica analisi.</p>
+    <div class="hero-actions"><a class="btn" href="#search">Inizia la ricerca</a><a class="ghost" href="#analysis">Scopri l'AI →</a></div>
+  </div>
+  <div class="hero-card">
+    <div class="live-dot">RICERCA INTELLIGENTE</div>
+    <strong>“Massimo 18.000 €, dal 2020, benzina o ibrida, no 3 cilindri, affidabile”</strong>
+    <div class="hero-stat"><b>247</b><span>annunci trovati</span><b>32</b><span>compatibili</span></div>
+  </div>
+</section>
+
+<section id="search" class="section">
+  <div class="section-head"><div><div class="eyebrow">SEARCH ENGINE</div><h2>Cerca secondo le tue regole</h2></div><span class="pill">AI ready</span></div>
+  <div class="panel">
+    <div class="grid">
+      <label>Modello / parole chiave<input id="q" placeholder="Toyota Yaris Hybrid"></label>
+      <label>Prezzo max<input id="price" type="number" placeholder="18000"></label>
+      <label>Anno min<input id="year" type="number" placeholder="2020"></label>
+      <label>Km max<input id="km" type="number" placeholder="80000"></label>
+      <label>Alimentazione<select id="fuel"><option value="">Tutte</option><option>Benzina</option><option>Ibrida</option><option>Diesel</option><option>GPL</option><option>Elettrica</option></select></label>
+      <label>Cambio<select id="gear"><option value="">Tutti</option><option>Manuale</option><option>Automatico</option></select></label>
+      <label>Cilindri<select id="cyl"><option value="">Tutti</option><option value="3">Evita 3 cilindri</option><option value="4">4 cilindri</option><option value="6">6 cilindri</option></select></label>
+      <label>Km annui<input id="annual" type="number" placeholder="20000"></label>
+    </div>
+    <label class="priority">Cosa conta davvero per te?<textarea id="priority" placeholder="Affidabilità, consumi reali, manutenzione, no cinghia a bagno d'olio..."></textarea></label>
+    <div class="search-row"><button id="searchBtn" class="btn" type="button">Cerca e analizza <span>→</span></button><span id="status" aria-live="polite"></span></div>
+  </div>
+</section>
+
+<section id="results" class="section results-section" hidden>
+  <div class="section-head"><div><div class="eyebrow">MARKETPLACE</div><h2>Risultati</h2></div><p id="count"></p></div>
+  <div id="cards" class="cards"></div>
+</section>
+
+<section id="analysis" class="dark section">
+  <div class="eyebrow">AI ANALYST</div>
+  <h2>Non leggere solo l'annuncio.<br><em>Analizza l'auto.</em></h2>
+  <div class="features">
+    <article><span>01</span><b>Identificazione</b><p>Modello, generazione, motore, cambio e allestimento.</p></article>
+    <article><span>02</span><b>Tecnica</b><p>Distribuzione, turbo, DPF, EGR, batteria, richiami.</p></article>
+    <article><span>03</span><b>Costi reali</b><p>Carburante, manutenzione, pneumatici, bollo e possesso.</p></article>
+    <article><span>04</span><b>Fonti</b><p>Fatti, stime e testimonianze separati con livello di confidenza.</p></article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="eyebrow">DATA LAYER</div><h2>Multi-source by design</h2>
+  <div class="sources">
+    <article><b>Marketplace</b><p>Fonti di annunci tramite accessi consentiti, API, feed o licenze.</p></article>
+    <article><b>Dati veicolo</b><p>Specifiche, consumi, listini e versioni.</p></article>
+    <article><b>Ricerca</b><p>Richiami, difetti, manutenzione e consumi reali.</p></article>
+    <article><b>AI</b><p>Analisi con fonti, calcoli e livello di confidenza.</p></article>
+  </div>
+</section>
+</main>
+<footer>FutureCar · Automotive Intelligence · <span>© 2026</span></footer>
+<script src="app.js"></script>
+</body>
+</html>
