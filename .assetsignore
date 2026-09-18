@@ -1,5 +1,9 @@
 worker.js
 wrangler.toml
+README.md
+src/
 .git/
 .github/
+.gitignore
 .assetsignore
+.dev.vars*
